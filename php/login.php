@@ -16,7 +16,7 @@
 	{
 		$response = array( 
 		    "response" => 202,
-		    "session" => md5($email.".".$psw),
+		    "session" => md5($email.".".md5($psw)),
 		    "emailUser" => $email
 		); 
 		
