@@ -65,7 +65,7 @@ class DB
 			$sql = rtrim($sql, ',');
 
 		}
-
+		
 		$stmt = $this->pdo->prepare($sql);
 		return $stmt;
 

@@ -10,7 +10,9 @@
 	$psw = $_POST['psw'];
 	$imgProfilo = $_POST['img'];
 
-	$class = new PCTO($pdo);
+	$class = new PCTO();
+	$class->setPdo($pdo);
+	
 	$json = "";
 
 	$daInserire = array('nome' => $nome, 'cognome' => $cognome, 'email' => $email, 'password' => md5($psw), 'imgProfilo' => $imgProfilo);

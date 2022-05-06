@@ -7,7 +7,9 @@
 	$email = $_POST['email'];
 	$psw = $_POST['psw'];
 
-	$class = new PCTO($pdo);
+	$class = new PCTO();
+	$class->setPdo($pdo);
+
 	$json = "";
 
 	if($class->login($email,$psw))

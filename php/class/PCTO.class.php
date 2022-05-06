@@ -15,7 +15,7 @@ class PCTO extends DB
 
 	public function login($email, $psw)
 	{
-		$stmt = $this->select('*','utenti',array('email' => $email, 'password' => md5($psw)),aray('and'));
+		$stmt = $this->select('*','utenti',array('email' => $email, 'password' => md5($psw)),array('and'));
 		$stmt->execute();
 
 		return $stmt->rowCount() > 0;
