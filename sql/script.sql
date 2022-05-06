@@ -24,3 +24,4 @@ CREATE TABLE assegnazione(
 				ON DELETE CASCADE
 );
 
+
