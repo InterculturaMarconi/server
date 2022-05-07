@@ -1,9 +1,13 @@
 <?php
 
-	include '../class/DB.class.php';
-	include '../class/PCTO.class.php';
-	include '../class/USER.class.php';
-	include '../../includes/dbConn.php';
+	include 'class/DB.class.php';
+	include 'class/PCTO.class.php';
+	include 'class/USER.class.php';
+	include '../includes/dbConn.php';
+
+	/*$tabella = 'utenti';
+	$condizioniJSON = '{"email":"dcalisti03@gmail.com","id":"5"}';
+	$booleanJSON = '{"1":"and"}';*/
 
 	$tabella = $_POST['tabella'];
 	$condizioniJSON = $_POST['condizioni'];
@@ -19,7 +23,7 @@
 		$condizioni[$key] = $value;
 	}
 
-	foreach(json_decode($condizioniJSON) as $value)
+	foreach(json_decode($booleanJSON) as $value)
 	{
 		array_push($boolean, $value);
 	}
