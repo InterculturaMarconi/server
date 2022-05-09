@@ -10,7 +10,7 @@
         case "GET": getUtente(); break;
         case "POST": postUtente(); break;
         case "DELETE": deleteUtente(); break;
-        case "PUT": putRuolo(); break;
+        case "PUT": putUtente(); break;
     }
 
     function getUtente(){
