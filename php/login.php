@@ -1,39 +1,36 @@
 <?php
 
-	include 'class/DB.class.php';
-	include 'class/PCTO.class.php';
-	include '../includes/dbConn.php';
+include 'class/DB.class.php';
+include 'class/PCTO.class.php';
+include 'class/USER.class.php';
+include '../includes/dbConn.php';
 
-	$email = $_POST['email'];
-	$psw = $_POST['psw'];
+include 'middleware/postonly.php';
 
-	$class = new PCTO();
-	$class->setPdo($pdo);
+$body = json_decode(file_get_contents('php://input'), true);
 
-	$json = "";
+$class = new PCTO();
+$user = new USER();
+$class->setPdo($pdo);
+$user->setPdo($pdo);
 
-	if($class->login($email,$psw))
-	{
-		$response = array( 
-		    "response" => 202,
-		    "session" => md5($email.".".md5($psw)),
-		    "emailUser" => $email
-		); 
-		
-		$json = json_encode($response);
+if(!key_exists("email", $body) || !key_exists("password", $body)) {
+	echo json_encode(array("error" => "Email or password are missing."));
+	http_response_code(400);
+	exit();
+}
 
-	}else
-	{
-		$response = array( 
-		    "response" => 401
-		); 
-		
-		$json = json_encode($response);
-	}
+$email = $body['email'];
+$password = $body['password'];
 
-	echo $json;
+if (!$class->login($email, $password)) {
+	echo json_encode(array("error" => "Invalid credentials."));
+	http_response_code(401);
+	exit();
+}
 
+$token = md5($email.".".md5($password));
+$userdata = $user->getuserInfo($email, $password);
 
-
-
-?>
+echo(json_encode(array("token" => $token, "user" => $userdata)));
+http_response_code(201);
