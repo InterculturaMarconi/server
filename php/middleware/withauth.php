@@ -1,11 +1,13 @@
 <?php
-    function withAuth() {
-        include_once '../../includes/dbConn.php';
-        include_once '../class/RESPONSE.class.php';
-
+    function withAuth(PDO $db) {
         $headers = apache_request_headers();
 
-        $encoded_token = substr($headers['authorization'], 7) ?? $_COOKIE['authtoken'] ?? NULL;
+        $encoded_token = NULL;
+        if(key_exists('authorization', $headers)) {
+            $encoded_token = substr($headers['authorization'], 7);
+        } elseif (key_exists('token', $_COOKIE)) {
+            $encoded_token = $_COOKIE['token'];
+        }
 
         if ($encoded_token == NULL) {
             $res = new RESPONSE();
@@ -23,7 +25,7 @@
         }
 
         $data = explode("-", $token);
-        $stmt = $pdo->prepare("SELECT password FROM utenti WHERE email = :email");
+        $stmt = $db->prepare("SELECT password FROM utenti WHERE email = :email");
         $stmt->execute(array(":email" => $data[0]));
 
         if ($stmt->rowCount() != 1) {
@@ -36,11 +38,13 @@
         $password = $stmt->fetchColumn(0);
 
         $expected = md5($data[0].$password);
-        if ($expected != $token) {
+        if ($expected != $data[1]) {
             $res = new RESPONSE();
             $res->setStatus(403);
             $res->setMessage("You have not been authenticated.");
             $res->send();
         }
+
+        return $data;
     }
 ?>

@@ -16,22 +16,20 @@ class USER extends DB
 		}
 	}
 
-	public function getuserInfo($email)
+	public function getUserInfo($email)
 	{
 		$utente = array();
 		
-		$sql = "SELECT * FROM utenti LEFT JOIN assegnazione ON ksUtente = idUtente LEFT JOIN ruoli ON ksRuolo = idRuolo WHERE email = '".$email."' ";
+		$stmt = $this->select('*', 'utenti', array('email' => $email));
+		$stmt->execute();
 
-		$result = $this->getPdo()->query($sql);
-		while($row = $result->fetch())
+		while($row = $stmt->fetch())
 		{
+			$utente['id'] = $row['idUtente'];
 			$utente['nome'] = $row['nome'];
 			$utente['cognome'] = $row['cognome'];
 			$utente['email'] = $row['email'];
 			$utente['img'] = $row['imgProfilo'];
-			$utente['idRuolo'] = $row['idRuolo'];
-			$utente['denominazione'] = $row['denominazione'];
-
 		}
 
 		return $utente;

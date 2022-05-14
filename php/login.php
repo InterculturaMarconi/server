@@ -5,7 +5,9 @@ include_once 'class/PCTO.class.php';
 include_once 'class/USER.class.php';
 include_once 'class/RESPONSE.class.php';
 include_once '../includes/dbConn.php';
+include_once 'middleware/withmethod.php';
 
+withMethod("POST");
 
 $body = json_decode(file_get_contents('php://input'), true);
 
@@ -32,7 +34,7 @@ if (!$class->login($email, $password)) {
 }
 
 $token = base64_encode($email."-".md5($email.md5($password)));
-$userdata = $user->getuserInfo($email, $password);
+$userdata = $user->getUserInfo($email, $password);
 
 $res = new RESPONSE();
 $res->setSuccess();
