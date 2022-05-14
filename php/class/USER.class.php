@@ -20,7 +20,7 @@ class USER extends DB
 	{
 		$utente = array();
 		
-		$sql = "SELECT * FROM utenti INNER JOIN assegnazione ON ksUtente = idUtente INNER JOIN ruoli ON ksRuolo = idRuolo WHERE email = '".$email."' ";
+		$sql = "SELECT * FROM utenti LEFT JOIN assegnazione ON ksUtente = idUtente LEFT JOIN ruoli ON ksRuolo = idRuolo WHERE email = '".$email."' ";
 
 		$result = $this->getPdo()->query($sql);
 		while($row = $result->fetch())

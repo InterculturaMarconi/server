@@ -1,10 +1,9 @@
 <?php
 
-include 'class/DB.class.php';
-include 'class/PCTO.class.php';
-include '../includes/dbConn.php';
-
-include 'middleware/postonly.php';
+include_once 'class/DB.class.php';
+include_once 'class/PCTO.class.php';
+include_once 'class/RESPONSE.class.php';
+include_once '../includes/dbConn.php';
 
 $body = json_decode(file_get_contents('php://input'), true);
 
@@ -14,9 +13,10 @@ if (
 	!key_exists("email", $body) ||
 	!key_exists("password", $body)
 ) {
-	echo json_encode(array("error" => "Body fileds are missing."));
-	http_response_code(400);
-	exit();
+	$res = new RESPONSE();
+	$res->setStatus(400);
+	$res->setMessage("User data are missing.");
+	$res->send();
 }
 
 $nome = $body['nome'];
@@ -31,18 +31,20 @@ $class->setPdo($pdo);
 $daInserire = array('nome' => $nome, 'cognome' => $cognome, 'email' => $email, 'password' => md5($psw), 'imgProfilo' => $imgProfilo);
 
 if ($class->userAlreadyExists($email)) {
-	echo json_encode(array("error" => "User already exists."));
-	http_response_code(400);
-	exit();
+	$res = new RESPONSE();
+	$res->setStatus(400);
+	$res->setMessage("User already exists.");
+	$res->send();
 }
 
 if (!$class->register($daInserire)) {
-	echo json_encode(array("error" => "Error while registering."));
-	http_response_code(500);
-	exit();
+	$res = new RESPONSE();
+	$res->setStatus(500);
+	$res->setMessage("Error while registering.");
+	$res->send();
 }
 
-$token = md5($email.".".md5($psw));
+$token = base64_encode($email."-".md5($email.md5($psw)));
 $user = array(
 	"nome" => $nome,
 	"cognome" => $cognome,
@@ -50,5 +52,11 @@ $user = array(
 	"img" => $imgProfilo
 );
 
-echo json_encode(array("token" => $token, "user" => $user));
-http_response_code(201);
+$res = new RESPONSE();
+$res->setSuccess();
+$res->setStatus(201);
+$res->setMessage("User registered.");
+$res->setData(array("token" => $token, "user" => $user));
+$res->send();
+
+?>
