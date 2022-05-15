@@ -28,7 +28,7 @@ $password = $body['password'];
 
 if (!$class->login($email, $password)) {
 	$res = new RESPONSE();
-	$res->setStatus(403);
+	$res->setStatus(401);
 	$res->setMessage("Invalid credentials.");
 	$res->send();
 }

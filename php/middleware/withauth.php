@@ -40,7 +40,7 @@
         $expected = md5($data[0].$password);
         if ($expected != $data[1]) {
             $res = new RESPONSE();
-            $res->setStatus(403);
+            $res->setStatus(401);
             $res->setMessage("You have not been authenticated.");
             $res->send();
         }
