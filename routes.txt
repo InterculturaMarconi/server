@@ -1,0 +1,23 @@
+Tutti i campi che iniziano con i : sono parametri
+
+GET     /user                   - Informazioni dell'utente corrente (Tramite auth token)
+GET     /user/:id               - Informazioni dell'utente selezionato
+POST    /user                   - Crea un nuovo utente (Controllare ruolo dell'utente autenticato)
+PUT     /user/:id               - Aggiorna le informazioni dell'utente selezionato
+DELETE  /user/:id               - Elimina tutte le informazioni dell'utente selezionato
+
+GET     /user/:id/roles         - Ritorna tutti i ruoli dell'utente slezionato
+POST    /user/:id/roles/:id     - Assegna il ruolo all'utente slezionato
+DELETE  /user/:id/roles/:id     - Revoca il ruolo all'utente slezionato
+
+GET     /users                  - Ritorna tutti gli utenti registrati (Controllare ruolo dell'utente autenticato)
+
+Per ogni utente ritornare le seguenti informazioni:
+    - id
+    - nome
+    - cognome
+    - email
+    - propic
+
+Per quanto riguarda la gestione dei ruoli (come entità, non le asseganzioni) non c'è bisogno di
+creare una API poiché sarà gestito al 100% direttamenti in DB.
