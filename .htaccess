@@ -14,5 +14,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^login$ php/login.php
 RewriteRule ^register$ php/register.php
 
+RewriteRule ^users$ php/users.php
 RewriteRule ^user$ php/user.php
-RewriteRule ^user/([1-9][0-9]*)$ php/user.php?id=$1
+RewriteRule ^user/([1-9][0-9]*)$/roles php/user.php?id=$1&roles
+RewriteRule ^user/([1-9][0-9]*)$/roles/([1-9][0-9]*)$ php/user.php?id=$1&role=$2
