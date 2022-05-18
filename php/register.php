@@ -25,7 +25,7 @@ $email = $body['email'];
 $psw = $body['password'];
 $imgProfilo = $body['img'] ?? "";
 
-$userRepo = new User();
+$userRepo = new User($pdo);
 
 $daInserire = array('nome' => $nome, 'cognome' => $cognome, 'email' => $email, 'password' => md5($psw), 'imgProfilo' => $imgProfilo);
 

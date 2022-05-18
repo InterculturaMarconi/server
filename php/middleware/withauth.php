@@ -8,8 +8,8 @@
         $encoded_token = NULL;
         if(key_exists('authorization', $headers) || key_exists('Authorization', $headers)) {
             $encoded_token = substr($headers['authorization'] ?? $headers['Authorization'], 7);
-        } elseif (key_exists('token', $_COOKIE)) {
-            $encoded_token = $_COOKIE['token'];
+        } elseif (key_exists('auth-token', $_COOKIE)) {
+            $encoded_token = $_COOKIE['auth-token'];
         }
 
         if ($encoded_token == NULL) {
