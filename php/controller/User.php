@@ -1,16 +1,9 @@
 <?php
-    include_once "../../includes/dbConn.php";
-    include_once "../middleware/withauth.php";
-    include_once '../class/DB.class.php';
-    include_once '../class/PCTO.class.php';
-    include_once './/class/RESPONSE.class.php';
-    include_once '../includes/dbConn.php';
-    
-    Class User{
+    Class UserController {
         public function getUsers(){
-            global $pdo, $class;
+            global $pcto, $userRepo;
 
-            if(!$class->isAdmin()){
+            if(!$pcto->isAdmin()){
                 $res = new RESPONSE();
                 $res->setStatus(401);
                 $res->setMessage("Operation not permitted.");
@@ -18,9 +11,9 @@
                 $res->send();
             }
 
-            $stmt = $class->select("*", "utenti");
+            $users = $userRepo->getAll();
     
-            if ($stmt->rowCount() < 1) {
+            if (count($users) == 0) {
                 $res = new RESPONSE();
                 $res->setStatus(400);
                 $res->setMessage("No users found.");
@@ -28,56 +21,29 @@
                 $res->send();
             }
     
-            $result = array();
-            
-            while($row = $stmt->fetch())
-            {
-                $user = array(
-                    'id' => $row['idUtente'],
-                    'nome' => $row['nome'],
-                    'cognome' => $row['cognome'],
-                    'email' => $row['email'],
-                    'img' => $row['imgProfilo']
-                );
-
-                array_push($result, $row);
-            }
-    
             $response = new RESPONSE();
             $response->setStatus(200);
             $response->setSuccess();
-            $response->setData($result);
+            $response->setData($users);
             $response->send();
         }
 
         public function getUser(){
-            global $pdo, $class;
-            $token = withAuth($pdo);
+            global $pcto, $userRepo;
+            $token = withAuth();
             
             if (isset($_GET['id'])) {
                 $id = $_GET['id'];
     
-                $stmt = $class->select('*', 'utenti', array('idUtente' => $id));
-                $stmt->execute();
+                $user = $userRepo->get($id);
     
-                if ($stmt->rowCount() != 1) {
+                if ($user == NULL) {
                     $res = new RESPONSE();
                     $res->setStatus(400);
                     $res->setMessage("No user found with that id.");
                     $res->setError(1);
                     $res->send();
-                }
-    
-                $result = $stmt->fetch();
-    
-                $user = array(
-                    'id' => $result['idUtente'],
-                    'nome' => $result['nome'],
-                    'cognome' => $result['cognome'],
-                    'email' => $result['email'],
-                    'img' => $result['imgProfilo']
-                );
-    
+                }    
                 
                 $response = new RESPONSE();
                 $response->setStatus(200);
@@ -86,7 +52,8 @@
                 $response->send();
             }
     
-            $user = $class->getUserInfo($token[0]);
+            $user = $userRepo->getByEmail($token[0]);
+
             $response = new RESPONSE();
             $response->setStatus(200);
             $response->setSuccess();
@@ -95,9 +62,9 @@
         }
 
         public function addUser(){
-            global $pdo, $class;
+            global $pcto, $userRepo;
 
-            if(!$class->isAdmin()){
+            if(!$pcto->isAdmin()){
                 $res = new RESPONSE();
                 $res->setStatus(401);
                 $res->setMessage("Operation not permitted.");
@@ -128,7 +95,7 @@
             
             $daInserire = array('nome' => $nome, 'cognome' => $cognome, 'email' => $email, 'password' => md5($psw), 'imgProfilo' => $imgProfilo);
             
-            if ($class->userAlreadyExists($email)) {
+            if ($userRepo->existsByEmail($email)) {
                 $res = new RESPONSE();
                 $res->setStatus(400);
                 $res->setMessage("User already exists.");
@@ -136,7 +103,7 @@
                 $res->send();
             }
             
-            if (!$class->register($daInserire)) {
+            if (!$userRepo->create($daInserire)) {
                 $res = new RESPONSE();
                 $res->setStatus(500);
                 $res->setMessage("Error while registering.");
@@ -153,79 +120,79 @@
             $res = new RESPONSE();
             $res->setSuccess();
             $res->setStatus(201);
-            $res->setMessage("User registered.");
+            $res->setMessage("User added.");
             $res->setData($user);
             $res->send();
         }
 
-        public function updateUser(){
-            global $pdo, $class;
+        // public function updateUser(){
+        //     global $pdo, $pcto;
 
-            if(!$class->isAdmin()){
-                $res = new RESPONSE();
-                $res->setStatus(401);
-                $res->setMessage("Operation not permitted.");
-                $res->setError(1);
-                $res->send();
-            }
+        //     if(!$pcto->isAdmin()){
+        //         $res = new RESPONSE();
+        //         $res->setStatus(401);
+        //         $res->setMessage("Operation not permitted.");
+        //         $res->setError(1);
+        //         $res->send();
+        //     }
 
-            $body = json_decode(file_get_contents('php://input'), true);
+        //     $body = json_decode(file_get_contents('php://input'), true);
 
-            if (
-                !key_exists("nome", $body) &&
-                !key_exists("cognome", $body) &&
-                !key_exists("img", $body)
-            ) {
-                $res = new RESPONSE();
-                $res->setStatus(400);
-                $res->setMessage("User data are missing.");
-                $res->setError(0);
-                $res->send();
-            }
+        //     if (
+        //         !key_exists("nome", $body) &&
+        //         !key_exists("cognome", $body) &&
+        //         !key_exists("img", $body)
+        //     ) {
+        //         $res = new RESPONSE();
+        //         $res->setStatus(400);
+        //         $res->setMessage("User data are missing.");
+        //         $res->setError(0);
+        //         $res->send();
+        //     }
             
-            $daAggiornare = array();
+        //     $daAggiornare = array();
 
-            $idUtente = $_GET["idUtente"];
+        //     $idUtente = $_GET["id"];
 
-            if(isset($body['nome'])){
-                array_push($daAggiornare, array(
-                    "nome" => $body["nome"]
-                ));
-            }
+        //     if(isset($body['nome'])){
+        //         array_push($daAggiornare, array(
+        //             "nome" => $body["nome"]
+        //         ));
+        //     }
 
-            if(isset($body['cognome'])){
-                array_push($daAggiornare, array(
-                    "cognome" => $body["cognome"]
-                ));
-            }
+        //     if(isset($body['cognome'])){
+        //         array_push($daAggiornare, array(
+        //             "cognome" => $body["cognome"]
+        //         ));
+        //     }
 
-            if(isset($body['img'])){
-                array_push($daAggiornare, array(
-                    "img" => $body["img"]
-                ));
-            }
+        //     if(isset($body['img'])){
+        //         array_push($daAggiornare, array(
+        //             "img" => $body["img"]
+        //         ));
+        //     }
                         
-            if (!$class->userAlreadyExists($email)) {
-                $res = new RESPONSE();
-                $res->setStatus(400);
-                $res->setMessage("User not exists.");
-                $res->setError(1);
-                $res->send();
-            }
+        //     if (!$pcto->userAlreadyExists($email)) {
+        //         $res = new RESPONSE();
+        //         $res->setStatus(400);
+        //         $res->setMessage("User not exists.");
+        //         $res->setError(1);
+        //         $res->send();
+        //     }
             
-            $class->updateComplete($daAggiornare, "utenti", array("idUtente" => $idUtente));
+        //     $pcto->updateComplete($daAggiornare, "utenti", array("idUtente" => $idUtente));
             
-            $res = new RESPONSE();
-            $res->setSuccess();
-            $res->setStatus(201);
-            $res->setMessage("User updated.");
-            $res->send();
-        }
+        //     $res = new RESPONSE();
+        //     $res->setSuccess();
+        //     $res->setStatus(201);
+        //     $res->setMessage("User updated.");
+        //     $res->send();
+        // }
 
         public function deleteUser(){
-            global $pdo, $class;
+            global $pcto, $userRepo;
          
-            if(!$class->isAdmin()){
+            if(!$pcto->isAdmin()){
                 $res = new RESPONSE();
                 $res->setStatus(401);
                 $res->setMessage("Operation not permitted.");
@@ -233,17 +200,22 @@
                 $res->send();
             }
 
-            $idUtente = $_GET["idUtente"];
+            $idUtente = $_GET["id"];
 
-            if (!$class->userAlreadyExistsById($idUtente)) {
+            if (!$userRepo->exists($idUtente)) {
                 $res = new RESPONSE();
                 $res->setStatus(400);
-                $res->setMessage("User not exists.");
+                $res->setMessage("User does not exist.");
                 $res->setError(1);
                 $res->send();
             }
 
-            $class->delete("utenti", array("idUtente" => $idUtente));
+            if (!$userRepo->delete($idUtente)) {
+                $res = new RESPONSE();
+                $res->setStatus(500);
+                $res->setMessage("Error while deleting.");
+                $res->send();
+            }
 
             $res = new RESPONSE();
             $res->setSuccess();

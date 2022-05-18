@@ -1,10 +1,13 @@
 <?php
-    function withAuth(PDO $db) {
+    function withAuth() {
+        global $pdo;
+
+        
         $headers = apache_request_headers();
 
         $encoded_token = NULL;
-        if(key_exists('authorization', $headers)) {
-            $encoded_token = substr($headers['authorization'], 7);
+        if(key_exists('authorization', $headers) || key_exists('Authorization', $headers)) {
+            $encoded_token = substr($headers['authorization'] ?? $headers['Authorization'], 7);
         } elseif (key_exists('token', $_COOKIE)) {
             $encoded_token = $_COOKIE['token'];
         }
@@ -25,7 +28,7 @@
         }
 
         $data = explode("-", $token);
-        $stmt = $db->prepare("SELECT password FROM utenti WHERE email = :email");
+        $stmt = $pdo->prepare("SELECT password FROM utenti WHERE email = :email");
         $stmt->execute(array(":email" => $data[0]));
 
         if ($stmt->rowCount() != 1) {

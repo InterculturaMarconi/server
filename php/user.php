@@ -1,117 +1,101 @@
 <?php
-    include '../../includes/dbConn.php';
-	include '../class/DB.class.php';
-    include '../class/USER.class.php';
-    include '../class/RESPONSE.class.php';
+    include_once 'PCTO.php';
+    include_once 'RESPONSE.php';
 
-    $class = new USER();
-	$class->setPdo($pdo);
-	
-    include '../middleware/withauth.php';
+    include_once 'controller/User.php';
+    include_once 'controller/Role.php';
 
-    switch($_SERVER['REQUEST_METHOD']){
-        case "GET": getUtente(); break;
-        // case "POST": postUtente(); break;
-        // case "DELETE": deleteUtente(); break;
-        // case "PUT": putUtente(); break;
+    include_once 'repository/User.php';
+    include_once 'repository/Role.php';
+    
+    include_once '../includes/dbConn.php';
+    include_once 'middleware/withauth.php';
+
+    $pcto = new PCTO($pdo);
+    $userRepo = new User($pdo);
+    $roleRepo = new Role($pdo);
+
+    $userController = new UserController();
+    $roleController = new RoleController();
+
+    switch($_SERVER["REQUEST_METHOD"]) {
+        case "GET": GET(); break;
+        case "POST": POST(); break;
+        case "PUT": PUT(); break;
+        case "DELETE": DELETE(); break;
     }
 
-    function getUtente() {
-		global $pdo, $class;
-		$token = withAuth($pdo);
+    function GET() {
+        global $userController, $roleController;
 
-		if (isset($_GET['id'])) {
-        	$id = $_GET['id'];
+        if(isset($_GET["action"])) {
+            switch ($_GET["action"]) {
+                case "roles":
+                    $roleController->getRoles();
+                    break;
 
-        	$stmt = $class->select('*', 'utenti', array('idUtente' => $id));
-			$stmt->execute();
+                case "all":
+                    $userController->getUsers();
+                    break;
 
-			if ($stmt->rowCount() != 1) {
-				$res = new RESPONSE();
-				$res->setStatus(400);
-				$res->setMessage("No user found with that id.");
-                $res->setError(1);
-				$res->send();
-			}
+                default: (new RESPONSE())
+                    ->setStatus(400)
+                    ->setMessage("Invalid action")
+                    ->send();
+            }
+        }
 
-			$result = $stmt->fetch();
-
-			$user = array(
-				'id' => $result['idUtente'],
-				'nome' => $result['nome'],
-				'cognome' => $result['cognome'],
-				'email' => $result['email'],
-				'img' => $result['imgProfilo']
-			);
-
-			
-			$response = new RESPONSE();
-			$response->setStatus(200);
-			$response->setSuccess();
-			$response->setData($user);
-			$response->send();
-		}
-
-		$user = $class->getUserInfo($token[0]);
-		$response = new RESPONSE();
-		$response->setStatus(200);
-		$response->setSuccess();
-		$response->setData($user);
-		$response->send();
+        $userController->getUser();
     }
 
-    // function postRuolo(){
-    //     $nome = $_POST['nome'];
-    //     $cognome = $_POST['cognome'];
-    //     $email = $_POST['email'];
-    //     $password = $_POST['password'];
-    //     $imgProfilo = $_POST['imgProfilo'];
+    function POST() {
+        global $userController, $roleController;
 
-    //     $daInserire = array('nome' => $nome, 'cognome' => $cognome, 'email' => $email, 'password' => $password, 'imgProfilo' => $imgProfilo);
+        if(isset($_GET["action"])) {
+            switch ($_GET["action"]) {
+                case "roles":
+                    $roleController->addRole();
+                    break;
 
-	// 	$stmt = $class->insert($daInserire, 'utenti');
-	// 	$stmt->execute();
+                default: (new RESPONSE())
+                    ->setStatus(400)
+                    ->setMessage("Invalid action")
+                    ->send();
+            }
+        }
 
-	// 	echo $stmt;
-    // }
+        $userController->addUser();
+    }
+    function PUT() {
+        global $userController, $roleController;
 
-    // function deleteUtente(){
-    //     $idUtente = $_DELETE['idUtente'];
+        if(isset($_GET["action"])) {
+            switch ($_GET["action"]) {
+                default: (new RESPONSE())
+                    ->setStatus(400)
+                    ->setMessage("Invalid action")
+                    ->send();
+            }
+        }
 
-    //     $stmt = $class->delete("utenti", array("idUtente" => $idUtente));
-	// 	$stmt->execute();
+        $userController->updateUser();
+    }
+    function DELETE() {
+        global $userController, $roleController;
 
-    //     echo $stmt;
-    // }
+        if(isset($_GET["action"])) {
+            switch ($_GET["action"]) {
+                case "roles":
+                    $roleController->deleteRole();
+                    break;
 
-    // function putUtente(){
-    //     $modifiche = array();
+                default: (new RESPONSE())
+                    ->setStatus(400)
+                    ->setMessage("Invalid action")
+                    ->send();
+            }
+        }
 
-    //     $idUtente = $_POST['idUtente'];
-
-    //     if(isset($_POST['nome'])){
-    //         array_push($modifiche, 'nome' => $_POST['nome']);
-    //     }
-
-    //     if(isset($_POST['cognome'])){
-    //         array_push($modifiche, 'cognome' => $_POST['cognome']);
-    //     }
-
-    //     if(isset($_POST['email'])){
-    //         array_push($modifiche, 'email' => $_POST['email']);
-    //     }
-
-    //     if(isset($_POST['password'])){
-    //         array_push($modifiche, 'password' => $_POST['password']);
-    //     }
-
-    //     if(isset($_POST['imgProfilo'])){
-    //         array_push($modifiche, 'imgProfilo' => $_POST['imgProfilo']);
-    //     }
-
-	// 	$stmt = $class->updateComplete($modifiche, 'utenti', array('idUtente' => $idUtente));
-	// 	$stmt->execute();
-
-	// 	echo $stmt;
-    // }
+        $userController->deleteUser();
+    }
 ?>

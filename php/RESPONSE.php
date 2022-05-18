@@ -1,13 +1,15 @@
 <?php
+    include_once "cors.php";
+
     class RESPONSE
     {
-        private int $status = 400;
+        private $status = 400;
         private $success = false;
-        private string $message = "";
-        private array $data = array();
-        private int $error = -1;
+        private $message = "";
+        private $data = array();
+        private $error = -1;
 
-        public function setStatus(int $status)
+        public function setStatus($status)
         {
             $this->status = $status;
         }
@@ -17,17 +19,17 @@
             $this->success = $success;
         }
 
-        public function setMessage(string $message)
+        public function setMessage($message)
         {
             $this->message = $message;
         }
 
-        public function setData(array $data)
+        public function setData($data)
         {
             $this->data = $data;
         }
 
-        public function setError(int $error)
+        public function setError($error)
         {
             $this->error = $error;
         }
@@ -39,7 +41,8 @@
                 "data" => $this->data,
                 "error" => $this->error
             ));
-
+            
+            header("Content-Type: application/json");
             http_response_code($this->status);
 
             exit();

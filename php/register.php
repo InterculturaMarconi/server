@@ -1,8 +1,7 @@
 <?php
 
-include_once 'class/DB.class.php';
-include_once 'class/PCTO.class.php';
-include_once 'class/RESPONSE.class.php';
+include_once 'RESPONSE.php';
+include_once 'repository/User.php';
 include_once '../includes/dbConn.php';
 
 $body = json_decode(file_get_contents('php://input'), true);
@@ -26,12 +25,11 @@ $email = $body['email'];
 $psw = $body['password'];
 $imgProfilo = $body['img'] ?? "";
 
-$class = new PCTO();
-$class->setPdo($pdo);
+$userRepo = new User();
 
 $daInserire = array('nome' => $nome, 'cognome' => $cognome, 'email' => $email, 'password' => md5($psw), 'imgProfilo' => $imgProfilo);
 
-if ($class->userAlreadyExists($email)) {
+if ($userRepo->existsByEmail($email)) {
 	$res = new RESPONSE();
 	$res->setStatus(400);
 	$res->setMessage("User already exists.");
@@ -39,7 +37,7 @@ if ($class->userAlreadyExists($email)) {
 	$res->send();
 }
 
-if (!$class->register($daInserire)) {
+if (!$userRepo->create($daInserire)) {
 	$res = new RESPONSE();
 	$res->setStatus(500);
 	$res->setMessage("Error while registering.");
@@ -53,6 +51,8 @@ $user = array(
 	"email" => $email,
 	"img" => $imgProfilo
 );
+
+setcookie("auth-token", $token, time() + (86400 * 30), "/", "pctomarconi.altervista.org", true, true);
 
 $res = new RESPONSE();
 $res->setSuccess();

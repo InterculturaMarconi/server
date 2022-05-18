@@ -1,9 +1,8 @@
 <?php
 
-include_once 'class/DB.class.php';
-include_once 'class/PCTO.class.php';
-include_once 'class/USER.class.php';
-include_once 'class/RESPONSE.class.php';
+include_once 'PCTO.php';
+include_once 'RESPONSE.php';
+include_once 'repository/User.php';
 include_once '../includes/dbConn.php';
 include_once 'middleware/withmethod.php';
 
@@ -11,10 +10,8 @@ withMethod("POST");
 
 $body = json_decode(file_get_contents('php://input'), true);
 
-$class = new PCTO();
-$user = new USER();
-$class->setPdo($pdo);
-$user->setPdo($pdo);
+$pcto = new PCTO($pdo);
+$userRepo = new User($pdo);
 
 if(!key_exists("email", $body) || !key_exists("password", $body)) {
 	$res = new RESPONSE();
@@ -27,7 +24,7 @@ if(!key_exists("email", $body) || !key_exists("password", $body)) {
 $email = $body['email'];
 $password = $body['password'];
 
-if (!$class->login($email, $password)) {
+if (!$pcto->login($email, $password)) {
 	$res = new RESPONSE();
 	$res->setStatus(401);
 	$res->setMessage("Invalid credentials.");
@@ -36,7 +33,9 @@ if (!$class->login($email, $password)) {
 }
 
 $token = base64_encode($email."-".md5($email.md5($password)));
-$userdata = $user->getUserInfo($email, $password);
+$userdata = $userRepo->getByEmail($email);
+
+setcookie("auth-token", $token, time() + (86400 * 30), "/", "pctomarconi.altervista.org", true, true);
 
 $res = new RESPONSE();
 $res->setSuccess();
