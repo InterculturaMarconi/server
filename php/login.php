@@ -20,6 +20,7 @@ if(!key_exists("email", $body) || !key_exists("password", $body)) {
 	$res = new RESPONSE();
 	$res->setStatus(400);
 	$res->setMessage("Email or password are missing.");
+	$res->setError(0);
 	$res->send();
 }
 
@@ -30,6 +31,7 @@ if (!$class->login($email, $password)) {
 	$res = new RESPONSE();
 	$res->setStatus(401);
 	$res->setMessage("Invalid credentials.");
+	$res->setError(2);
 	$res->send();
 }
 

@@ -1,12 +1,13 @@
 <?php
     class RESPONSE
     {
-        private $status = 400;
+        private int $status = 400;
         private $success = false;
-        private $message = "";
-        private $data = NULL;
+        private string $message = "";
+        private array $data = array();
+        private int $error = -1;
 
-        public function setStatus($status)
+        public function setStatus(int $status)
         {
             $this->status = $status;
         }
@@ -16,23 +17,31 @@
             $this->success = $success;
         }
 
-        public function setMessage($message)
+        public function setMessage(string $message)
         {
             $this->message = $message;
         }
 
-        public function setData($data)
+        public function setData(array $data)
         {
             $this->data = $data;
+        }
+
+        public function setError(int $error)
+        {
+            $this->error = $error;
         }
 
         public function send() {
             echo json_encode(array(
                 "success" => $this->success,
                 "message" => $this->message,
-                "data" => $this->data
+                "data" => $this->data,
+                "error" => $this->error
             ));
+
             http_response_code($this->status);
+
             exit();
         }
     }

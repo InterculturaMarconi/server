@@ -30,6 +30,7 @@
 				$res = new RESPONSE();
 				$res->setStatus(400);
 				$res->setMessage("No user found with that id.");
+                $res->setError(1);
 				$res->send();
 			}
 

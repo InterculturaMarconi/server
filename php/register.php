@@ -16,6 +16,7 @@ if (
 	$res = new RESPONSE();
 	$res->setStatus(400);
 	$res->setMessage("User data are missing.");
+	$res->setError(0);
 	$res->send();
 }
 
@@ -34,6 +35,7 @@ if ($class->userAlreadyExists($email)) {
 	$res = new RESPONSE();
 	$res->setStatus(400);
 	$res->setMessage("User already exists.");
+	$res->setError(1);
 	$res->send();
 }
 
