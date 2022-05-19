@@ -71,7 +71,7 @@
         }
 
         public function add($dataVisualizzazione, $idObiettivo){
-            $sql = "INSERT INTO form SET dataVisualizzazione = :dataVisualizzazione, idObiettivo = :idObiettivo;";
+            $sql = "INSERT INTO form (dataVisualizzazione, idObiettivo) VALUES (:dataVisualizzazione, :idObiettivo);";
             $stmt  = $this->pdo->prepare($sql);
 
             $stmt->execute(

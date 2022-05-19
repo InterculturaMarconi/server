@@ -9,18 +9,27 @@ IndexIgnore *
 RewriteEngine On
 RewriteBase /
 
-RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^sql/.*$ / [R=301,L]
+RewriteRule ^php/.*$ / [R=301,L]
+RewriteRule ^includes/.*$ / [R=301,L]
 
 RewriteCond %{REQUEST_METHOD} OPTIONS
 RewriteRule ^(.*)$ php/cors.php 
+
+RewriteCond %{REQUEST_FILENAME} !-f
 
 RewriteRule ^login/?$ php/login.php
 RewriteRule ^register/?$ php/register.php
 
 RewriteRule ^users/?$ php/user.php?action=all
+
 RewriteRule ^user/?$ php/user.php
 RewriteRule ^user/([1-9][0-9]*)/?$ php/user.php?id=$1
 RewriteRule ^user/([1-9][0-9]*)/roles/?$ php/user.php?action=roles&id=$1
 RewriteRule ^user/([1-9][0-9]*)/roles/([1-9][0-9]*)/?$ php/user.php?action=roles&id=$1&role=$2
 
-RewriteRule ^froms/?$
+RewriteRule ^forms/?$ php/form.php?action=all
+RewriteRule ^forms/([1-9][0-9]*)/?$ php/form.php?action=all&id=$1
+
+RewriteRule ^form/?$ php/form.php
+RewriteRule ^form/([1-9][0-9]*)/?$ php/form.php?id=$1

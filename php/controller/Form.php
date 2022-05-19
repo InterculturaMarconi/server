@@ -1,11 +1,11 @@
 <?php   
     class FormController {
         public function getForms(){
-            global $formRepo;
+            global $pcto, $formRepo;
             
-            $idObiettivo = $_GET["idObiettivo"];
+            $idObiettivo = $_GET["id"];
 
-            if(!$pcto->hasObjectivePermission($idObiettivo)){
+            if(!$pcto->isAdmin()){
                 $res = new RESPONSE();
                 $res->setStatus(401);
                 $res->setMessage("Operation not permitted.");
@@ -31,7 +31,7 @@
         }
 
         public function getFormsByObiettivo(){
-            global $formRepo;
+            global $pcto, $formRepo;
             
             $idObiettivo = $_GET["idObiettivo"];
 
@@ -61,12 +61,12 @@
         }
 
         public function getForm(){
-            global $formRepo;
+            global $pcto, $formRepo;
             
-            $idForm = $_GET["idForm"];
-            $forms = $formRepo->get($idForm);
+            $idForm = $_GET["id"];
+            $form = $formRepo->get($idForm);
     
-            if(!$pcto->hasObjectivePermission($forms["idObiettivo"])){
+            if(!$pcto->hasObjectivePermission($form["idObiettivo"])){
                 $res = new RESPONSE();
                 $res->setStatus(401);
                 $res->setMessage("Operation not permitted.");
@@ -74,7 +74,7 @@
                 $res->send();
             }
 
-            if (count($forms) == 0) {
+            if (count($form) == 0) {
                 $res = new RESPONSE();
                 $res->setStatus(400);
                 $res->setMessage("No forms found associated with this id.");
@@ -85,12 +85,12 @@
             $response = new RESPONSE();
             $response->setStatus(200);
             $response->setSuccess();
-            $response->setData($forms);
+            $response->setData($form);
             $response->send();
         }
     
         public function addForm(){
-            global $pcto;
+            global $pcto, $formRepo;
     
             if(!$pcto->isAdmin()){
                 $res = new RESPONSE();
@@ -113,7 +113,7 @@
         }
 
         public function updateForm(){
-            global $pcto;
+            global $pcto, $formRepo;
     
             if(!$pcto->isAdmin()){
                 $res = new RESPONSE();
@@ -144,7 +144,7 @@
         }
     
         public function deleteForm(){
-            global $pcto;
+            global $pcto, $formRepo;
     
             if(!$pcto->isAdmin()){
                 $res = new RESPONSE();
