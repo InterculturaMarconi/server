@@ -22,13 +22,13 @@ Per ogni utente ritornare le seguenti informazioni:
 Per quanto riguarda la gestione dei ruoli (come entità, non le asseganzioni) non c'è bisogno di
 creare una API poiché sarà gestito al 100% direttamenti in DB.
 
-GET     /forms              - Tutti i form in db
-GET     /forms/:id          - Tutti i form per quel determinato obiettivo
+//GET     /forms              - Tutti i form in db
+//GET     /forms/:id          - Tutti i form per quel determinato obiettivo
 
-GET     /form/:id           - Infromazioni circa il form dato
-POST    /form               - aggiunge un form
-PUT     /form/:id           - Aggiorna info di un form
-DELETE  /form/:id           - Rimuove il form
+//GET     /form/:id           - Infromazioni circa il form dato
+//POST    /form               - aggiunge un form
+//PUT     /form/:id           - Aggiorna info di un form
+//DELETE  /form/:id           - Rimuove il form
 
 GET     /form/:id/questions     - Tutte le domande di questo form
 

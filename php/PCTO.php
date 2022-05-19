@@ -27,6 +27,32 @@ class PCTO
 		return $stmt->rowCount() > 0;
 	}
 	
+	public function hasObjectivePermission($idObiettivo){
+		if(isAdmin())
+			return true;
+
+		$token = withAuth();
+		$email = $token[0];
+
+		$sql = "SELECT * FROM utenti 
+		INNER JOIN assegnazione
+			ON utenti.idUtente = assegnazione.ksUtente
+		INNER JOIN ruoli 
+			ON ruoli.idRuolo = assegnazione.ksRuolo
+		WHERE utenti.email = :email AND ruoli.denominazione = 'obiettivo_:idObiettivo';";
+
+		$stmt = $this->pdo->prepare($sql);
+
+		$stmt->execute(
+			array(
+				":email" => $email,
+				"idObiettivo" => $idObiettivo
+			)
+		);
+
+		return $stmt->rowCount() > 0;
+	}
+
 	public function isAdmin(){
 		$token = withAuth();
 		$email = $token[0];
