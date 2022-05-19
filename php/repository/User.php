@@ -146,6 +146,51 @@
 
             return $stmt->rowCount() > 0;
         }
+
+        // nome, cognome, email, password, imgProfilo
+        public function update($id, $values = []){
+            $currentValues = $this->get($id);
+
+            if(key_exists("nome", $values)){
+                $currentValues["nome"] = $values["nome"];
+            }
+
+            if(key_exists("cognome", $values)){
+                $currentValues["cognome"] = $values["cognome"];
+            }
+
+            if(key_exists("email", $values)){
+                $currentValues["email"] = $values["email"];
+            }
+
+            if(key_exists("password", $values)){
+                $currentValues["password"] = $values["password"];
+            }
+
+            if(key_exists("imgProfilo", $values)){
+                $currentValues["imgProfilo"] = $values["imgProfilo"];
+            }
+
+            $sql = "UPDATE utenti SET 
+                nome = :nome, 
+                cognome = :cognome,
+                email = :email,
+                password = :password,
+                imgProfilo = :imgProfilo
+                WHERE idUtente = :id";
+
+            $stmt = $this->pdo->prepare($sql);
+
+            $stmt->execute(
+                array(
+                    ":nome" => $currentValues["nome"],
+                    ":cognome" => $currentValues["cognome"],
+                    ":email" => $currentValues["email"],
+                    ":password" => $currentValues["password"],
+                    "imgProfilo" => $currentValues["imgProfilo"]
+                )
+            );
+        }
     }
 
 ?>
