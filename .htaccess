@@ -1,7 +1,7 @@
-<File ".htaccess">
-    Order allow, deny
+<Files ".htaccess">
+    Order allow,deny
     Deny from all
-</File>
+</Files>
 
 Options -Indexes
 IndexIgnore *
@@ -11,10 +11,14 @@ RewriteBase /
 
 RewriteCond %{REQUEST_FILENAME} !-f
 
-RewriteRule ^login$ php/login.php
-RewriteRule ^register$ php/register.php
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ php/cors.php 
 
-RewriteRule ^users$ php/users.php
-RewriteRule ^user$ php/user.php
-RewriteRule ^user/([1-9][0-9]*)$/roles php/user.php?id=$1&roles
-RewriteRule ^user/([1-9][0-9]*)$/roles/([1-9][0-9]*)$ php/user.php?id=$1&role=$2
+RewriteRule ^login/?$ php/login.php
+RewriteRule ^register/?$ php/register.php
+
+RewriteRule ^users/?$ php/user.php?action=all
+RewriteRule ^user/?$ php/user.php
+RewriteRule ^user/([1-9][0-9]*)/?$ php/user.php?id=$1
+RewriteRule ^user/([1-9][0-9]*)/roles/?$ php/user.php?action=roles&id=$1
+RewriteRule ^user/([1-9][0-9]*)/roles/([1-9][0-9]*)/?$ php/user.php?action=roles&id=$1&role=$2

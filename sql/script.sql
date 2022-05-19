@@ -21,7 +21,6 @@ CREATE TABLE assegnazione(
 				ON DELETE CASCADE,
 	FOREIGN KEY (ksUtente) REFERENCES Utenti(idUtente)
 				ON UPDATE CASCADE
-				ON DELETE CASCADE
+				ON DELETE CASCADE,
+	UNIQUE(ksRuolo, ksUtente)
 );
-
-
