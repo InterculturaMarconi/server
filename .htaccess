@@ -22,3 +22,5 @@ RewriteRule ^user/?$ php/user.php
 RewriteRule ^user/([1-9][0-9]*)/?$ php/user.php?id=$1
 RewriteRule ^user/([1-9][0-9]*)/roles/?$ php/user.php?action=roles&id=$1
 RewriteRule ^user/([1-9][0-9]*)/roles/([1-9][0-9]*)/?$ php/user.php?action=roles&id=$1&role=$2
+
+RewriteRule ^froms/?$

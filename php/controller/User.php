@@ -141,23 +141,15 @@
 
             $daInserire = array();
 
-            if (key_exists("nome", $body)) {
+            if (isset($body["nome"])) {
                 $daInserire['nome'] = $body['nome'];
             }
 
-            if (key_exists("cognome", $body)) {
+            if (isset($body["cognome"])) {
                 $daInserire['cognome'] = $body['cognome'];
             }
 
-            if (key_exists("email", $body)) {
-                $daInserire['email'] = $body['email'];
-            }
-
-            if (key_exists("password", $body)) {
-                $daInserire['password'] = md5($body['password']);
-            }
-
-            if (key_exists("img", $body)) {
+            if (isset($body["img"])) {
                 $daInserire['imgProfilo'] = $body['img'];
             }
 
@@ -171,8 +163,8 @@
 
             if (!$userRepo->update($id, $daInserire)) {
                 $res = new RESPONSE();
-                $res->setStatus(500);
-                $res->setMessage("Error while updating.");
+                $res->setStatus(400);
+                $res->setMessage("No data has been updated.");
                 $res->send();
             }
 
@@ -182,7 +174,7 @@
             $res->setSuccess();
             $res->setStatus(200);
             $res->setMessage("User updated.");
-            $res->setData($user);
+            $res->setData($daInserire);
             $res->send();
         }
 
