@@ -187,9 +187,12 @@
                     ":cognome" => $currentValues["cognome"],
                     ":email" => $currentValues["email"],
                     ":password" => $currentValues["password"],
-                    "imgProfilo" => $currentValues["imgProfilo"]
+                    ":imgProfilo" => $currentValues["imgProfilo"],
+                    ":id" => $id
                 )
             );
+
+            return $stmt->rowCount() > 0;
         }
     }
 

@@ -73,6 +73,22 @@ class PCTO
 		return $stmt->rowCount() > 0;
 	}
 
+	public function isSelf($id) {
+		$token = withAuth();
+		$sql = "SELECT idUtente FROM utenti WHERE email = :email;";
+
+		$stmt = $this->pdo->prepare($sql);
+		$stmt->execute(
+			array(
+				":email" => $token[0]
+			)
+		);
+
+		$userId = $stmt->fetchColumn();
+
+		return $id == $userId;
+	}
+
 	public function grant($user, $role) {
 		$sql = "INSERT INTO assegnazione (ksUtente, ksRuolo) VALUES (:user, :role)";
 

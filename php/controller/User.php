@@ -125,69 +125,66 @@
             $res->send();
         }
 
-        // public function updateUser(){
-        //     global $pdo, $pcto;
+        public function updateUser(){
+            global $pcto, $userRepo;
 
-        //     if(!$pcto->isAdmin()){
-        //         $res = new RESPONSE();
-        //         $res->setStatus(401);
-        //         $res->setMessage("Operation not permitted.");
-        //         $res->setError(1);
-        //         $res->send();
-        //     }
+            $id = $_GET['id'];
+            $body = json_decode(file_get_contents('php://input'), true);
 
-        //     $body = json_decode(file_get_contents('php://input'), true);
+            if (!$pcto->isSelf($id) || !$pcto->isAdmin()) {
+                $res = new RESPONSE();
+                $res->setStatus(401);
+                $res->setMessage("Operation not permitted.");
+                $res->setError(1);
+                $res->send();
+            }
 
-        //     if (
-        //         !key_exists("nome", $body) &&
-        //         !key_exists("cognome", $body) &&
-        //         !key_exists("img", $body)
-        //     ) {
-        //         $res = new RESPONSE();
-        //         $res->setStatus(400);
-        //         $res->setMessage("User data are missing.");
-        //         $res->setError(0);
-        //         $res->send();
-        //     }
-            
-        //     $daAggiornare = array();
+            $daInserire = array();
 
-        //     $idUtente = $_GET["id"];
+            if (key_exists("nome", $body)) {
+                $daInserire['nome'] = $body['nome'];
+            }
 
-        //     if(isset($body['nome'])){
-        //         array_push($daAggiornare, array(
-        //             "nome" => $body["nome"]
-        //         ));
-        //     }
+            if (key_exists("cognome", $body)) {
+                $daInserire['cognome'] = $body['cognome'];
+            }
 
-        //     if(isset($body['cognome'])){
-        //         array_push($daAggiornare, array(
-        //             "cognome" => $body["cognome"]
-        //         ));
-        //     }
+            if (key_exists("email", $body)) {
+                $daInserire['email'] = $body['email'];
+            }
 
-        //     if(isset($body['img'])){
-        //         array_push($daAggiornare, array(
-        //             "img" => $body["img"]
-        //         ));
-        //     }
-                        
-        //     if (!$pcto->userAlreadyExists($email)) {
-        //         $res = new RESPONSE();
-        //         $res->setStatus(400);
-        //         $res->setMessage("User not exists.");
-        //         $res->setError(1);
-        //         $res->send();
-        //     }
-            
-        //     $pcto->updateComplete($daAggiornare, "utenti", array("idUtente" => $idUtente));
-            
-        //     $res = new RESPONSE();
-        //     $res->setSuccess();
-        //     $res->setStatus(201);
-        //     $res->setMessage("User updated.");
-        //     $res->send();
-        // }
+            if (key_exists("password", $body)) {
+                $daInserire['password'] = md5($body['password']);
+            }
+
+            if (key_exists("img", $body)) {
+                $daInserire['imgProfilo'] = $body['img'];
+            }
+
+            if (count($daInserire) == 0) {
+                $res = new RESPONSE();
+                $res->setStatus(400);
+                $res->setMessage("No data to update.");
+                $res->setError(2);
+                $res->send();
+            }
+
+            if (!$userRepo->update($id, $daInserire)) {
+                $res = new RESPONSE();
+                $res->setStatus(500);
+                $res->setMessage("Error while updating.");
+                $res->send();
+            }
+
+            $user = $userRepo->get($id);
+
+            $res = new RESPONSE();
+            $res->setSuccess();
+            $res->setStatus(200);
+            $res->setMessage("User updated.");
+            $res->setData($user);
+            $res->send();
+        }
 
         public function deleteUser(){
             global $pcto, $userRepo;
