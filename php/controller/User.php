@@ -181,15 +181,15 @@
         public function deleteUser(){
             global $pcto, $userRepo;
          
-            if(!$pcto->isAdmin()){
+            $idUtente = $_GET["id"];
+
+            if(!$pcto->isAdmin() || $pcto-isSelf($idUtente)){
                 $res = new RESPONSE();
                 $res->setStatus(401);
                 $res->setMessage("Operation not permitted.");
                 $res->setError(1);
                 $res->send();
             }
-
-            $idUtente = $_GET["id"];
 
             if (!$userRepo->exists($idUtente)) {
                 $res = new RESPONSE();
