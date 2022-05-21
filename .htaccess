@@ -30,6 +30,16 @@ RewriteRule ^user/([1-9][0-9]*)/roles/([1-9][0-9]*)/?$ php/user.php?action=roles
 
 RewriteRule ^forms/?$ php/form.php?action=all
 RewriteRule ^forms/([1-9][0-9]*)/?$ php/form.php?action=all&id=$1
+RewriteRule ^forms/([1-9][0-9]*)/visible/?$ php/form.php?action=visible&id=$1
 
 RewriteRule ^form/?$ php/form.php
 RewriteRule ^form/([1-9][0-9]*)/?$ php/form.php?id=$1
+RewriteRule ^form/([1-9][0-9]*)/questions/?$ php/domande.php?action=all&form=$1
+RewriteRule ^form/([1-9][0-9]*)/answers/?$ php/risposte.php?action=all&form=$1
+RewriteRule ^form/([1-9][0-9]*)/answers/([1-9][0-9]*)/?$ php/risposte.php?action=user&form=$1&user=$2
+
+RewriteRule ^question/?$ php/domande.php?form=$1
+RewriteRule ^question/([1-9][0-9]*)/?$ php/domande.php?id=$1
+
+RewriteRule ^answer/?$ php/risposte.php
+RewriteRule ^answer/([1-9][0-9]*)/?$ php/risposte.php?&id=$1

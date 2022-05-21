@@ -24,24 +24,27 @@ creare una API poiché sarà gestito al 100% direttamenti in DB.
 
 //GET     /forms              - Tutti i form in db
 //GET     /forms/:id          - Tutti i form per quel determinato obiettivo
+//GET     /forms/:id/visible  - L'ultimo form visualizabbile dell'obiettivo
 
 //GET     /form/:id           - Infromazioni circa il form dato
 //POST    /form               - aggiunge un form
 //PUT     /form/:id           - Aggiorna info di un form
 //DELETE  /form/:id           - Rimuove il form
+//GET     /form/:id/questions       - Tutte le domande di questo form
+//GET     /form/:id/answers         - Tutte le risposte date al form
+//GET     /form/:id/answers/:id     - Tutte le risposte date al form dell'utente
 
-GET     /form/:id/questions     - Tutte le domande di questo form
 
-GET     /form/:id/question/:id  - Informazioni circa la domanda data per il form specificato
-POST    /form/:id/question      - aggiunge una domanda
-PUT     /form/:id/question/:id  - aggiorna una domanda
-DELETE  /form/:id/question/:id  - elimina la domanda
+GET     /question/:id  - Informazioni circa la domanda data per il form specificato
+POST    /question      - aggiunge una domanda
+PUT     /question/:id  - aggiorna una domanda
+DELETE  /question/:id  - elimina la domanda
+GET     /question/:id/answers/  - Tutte le risposte date a quella domanda
+GET     /question/:id/answers/:id  - La risposta data a quella domanda da parte dell'utente
 
-GET     /form/:id/question/:id/answers  - Tutte le risposte date a quella domanda
-GET     /form/:id/question/:id/answers/:id  - Tutte le risposte date a quella domanda da parte dell'utente
 
-GET     /form/:id/question/:id/answer/:id   - Informazioni circa quella risposta
-POST    /form/:id/question/:id/answer       - Aggiunge una risposta
-PUT     /form/:id/question/:id/answer/:id   - Aggiorna informazioni circa quella risposta
-DELETE  /form/:id/question/:id/answer/:id   - Elimina quall data risposta
+GET     /answer/:id   - Informazioni circa quella risposta
+POST    /answer       - Aggiunge una risposta
+PUT     /answer/:id   - Aggiorna informazioni circa quella risposta
+DELETE  /answer/:id   - Elimina quall data risposta
 
