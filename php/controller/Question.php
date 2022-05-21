@@ -97,9 +97,9 @@ class QuestionController
         $body = json_decode(file_get_contents('php://input'), true);
 
         if (
-            !isset($body["form_id"]) ||
-            !isset($body["text"]) ||
-            !isset($body["type"])
+            !isset($body["id_form"]) ||
+            !isset($body["testo"]) ||
+            !isset($body["tipo"])
         ) {
             $res = new RESPONSE();
             $res->setStatus(400);
@@ -108,11 +108,29 @@ class QuestionController
             $res->send();
         }
 
-        $idForm = $body["form_id"];
-        $testo = $body["text"];
+        $idForm = $body["id_form"];
+        $testo = $body["testo"];
         $tipo = $body["tipo"];
 
         $form = $formRepo->get($idForm);
+
+        if ($form == NULL) {
+            $res = new RESPONSE();
+            $res->setStatus(400);
+            $res->setMessage("No forms found associated with this id.");
+            $res->setError(1);
+            $res->send();
+        }
+
+        if (!$pcto->isObjectiveAdmin($form["id_obiettivo"])) {
+            $res = new RESPONSE();
+            $res->setStatus(401);
+            $res->setMessage("Operation not permitted.");
+            $res->setError(1);
+            $res->send();
+        }
+
+        $questionRepo->add($idForm, $testo, $tipo);
 
         $res = new RESPONSE();
         $res->setSuccess();

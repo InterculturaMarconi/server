@@ -24,8 +24,8 @@ class Form
         if ($row = $stmt->fetch()) {
             $form = array(
                 "id" => $id,
-                "visible_at" => $row["dataVisualizzazione"],
-                "objective_id" => $row["idObiettivo"],
+                "visibile_il" => $row["dataVisualizzazione"],
+                "id_obiettivo" => $row["idObiettivo"],
             );
         }
 
@@ -48,8 +48,8 @@ class Form
         while ($row = $stmt->fetch()) {
             $form = array(
                 "id" => $row["idForm"],
-                "visible_at" => $row["dataVisualizzazione"],
-                "objective_id" => $idObiettivo,
+                "visibile_il" => $row["dataVisualizzazione"],
+                "id_obiettivo" => $idObiettivo,
             );
 
             array_push($result, $form);
@@ -70,8 +70,8 @@ class Form
         while ($row = $stmt->fetch()) {
             $form = array(
                 "id" => $row["idForm"],
-                "visible_at" => $row["dataVisualizzazione"],
-                "objective_id" => $row["idObiettivo"],
+                "visibile_il" => $row["dataVisualizzazione"],
+                "id_obiettivo" => $row["idObiettivo"],
             );
 
             array_push($result, $form);
@@ -96,8 +96,8 @@ class Form
         if ($row = $stmt->fetch()) {
             $form = array(
                 "id" => $row["idForm"],
-                "visible_at" => $row["dataVisualizzazione"],
-                "objective_id" => $idObiettivo,
+                "visibile_il" => $row["dataVisualizzazione"],
+                "id_obiettivo" => $idObiettivo,
             );
         }
 

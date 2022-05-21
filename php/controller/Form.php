@@ -138,8 +138,8 @@ class FormController
         $body = json_decode(file_get_contents('php://input'), true);
 
         if (
-            !isset($body["objective_id"]) ||
-            !isset($body["visible_at"])
+            !isset($body["id_obiettivo"]) ||
+            !isset($body["visibile_il"])
         ) {
             $res = new RESPONSE();
             $res->setStatus(400);
@@ -148,8 +148,8 @@ class FormController
             $res->send();
         }
 
-        $idObiettivo = $body["objective_id"];
-        $dataVisualizzazione = $body["visible_at"];
+        $idObiettivo = $body["id_obiettivo"];
+        $dataVisualizzazione = $body["visibile_il"];
 
         $formRepo->add($dataVisualizzazione, $idObiettivo);
 
