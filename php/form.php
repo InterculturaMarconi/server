@@ -34,7 +34,6 @@ function GET()
                 if (isset($_GET["id"])) {
                     $formController->getFormsByObiettivo($_GET["id"]);
                 }
-
                 $formController->getForms();
                 break;
             case "visible":
@@ -44,6 +43,7 @@ function GET()
                     ->setStatus(400)
                     ->setMessage("Invalid action")
                     ->send();
+                break;
         }
     }
 
