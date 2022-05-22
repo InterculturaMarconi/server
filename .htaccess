@@ -9,10 +9,6 @@ IndexIgnore *
 RewriteEngine On
 RewriteBase /
 
-RewriteRule ^sql/.*$ / [R=301,L]
-RewriteRule ^php/.*$ / [R=301,L]
-RewriteRule ^includes/.*$ / [R=301,L]
-
 RewriteCond %{REQUEST_METHOD} OPTIONS
 RewriteRule ^(.*)$ php/cors.php 
 

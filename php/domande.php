@@ -18,7 +18,6 @@ $pcto = new PCTO($pdo);
 $formRepo = new Form($pdo);
 $questionRepo = new Question($pdo);
 
-$formController = new FormController();
 $questionController = new QuestionController();
 
 switch ($_SERVER["REQUEST_METHOD"]) {

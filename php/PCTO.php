@@ -29,7 +29,7 @@ class PCTO
 
     public function hasObjectivePermission($idObiettivo)
     {
-        if (isObjectiveAdmin()) {
+        if ($this->isObjectiveAdmin($idObiettivo)) {
             return true;
         }
 
@@ -57,7 +57,7 @@ class PCTO
 
     public function isObjectiveAdmin($idObiettivo)
     {
-        if (isAdmin()) {
+        if ($this->isAdmin()) {
             return true;
         }
 
