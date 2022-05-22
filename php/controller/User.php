@@ -136,7 +136,7 @@ class UserController
         $id = $_GET['id'];
         $body = json_decode(file_get_contents('php://input'), true);
 
-        if (!$pcto->isSelf($id) || !$pcto->isAdmin()) {
+        if (!$pcto->isSelf($id) && !$pcto->isAdmin()) {
             $res = new RESPONSE();
             $res->setStatus(401);
             $res->setMessage("Operation not permitted.");
@@ -179,7 +179,7 @@ class UserController
         $res->setSuccess();
         $res->setStatus(200);
         $res->setMessage("User updated.");
-        $res->setData($daInserire);
+        $res->setData($user);
         $res->send();
     }
 
@@ -189,7 +189,7 @@ class UserController
 
         $idUtente = $_GET["id"];
 
-        if (!$pcto->isAdmin() || $pcto->isSelf($idUtente)) {
+        if (!$pcto->isAdmin() && !$pcto->isSelf($idUtente)) {
             $res = new RESPONSE();
             $res->setStatus(401);
             $res->setMessage("Operation not permitted.");
@@ -214,7 +214,7 @@ class UserController
 
         $res = new RESPONSE();
         $res->setSuccess();
-        $res->setStatus(204);
+        $res->setStatus(200);
         $res->setMessage("User deleted.");
         $res->send();
     }
