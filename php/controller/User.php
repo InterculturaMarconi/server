@@ -1,6 +1,7 @@
 <?php
     Class UserController {
-        public function getUsers(){
+        public function getUsers()
+        {
             global $pcto, $userRepo;
 
             if(!$pcto->isAdmin()){
@@ -28,7 +29,8 @@
             $response->send();
         }
 
-        public function getUser(){
+        public function getUser()
+        {
             global $pcto, $userRepo;
             $token = withAuth();
             
@@ -61,7 +63,8 @@
             $response->send();
         }
 
-        public function addUser(){
+        public function addUser()
+        {
             global $pcto, $userRepo;
 
             if(!$pcto->isAdmin()){
@@ -125,7 +128,8 @@
             $res->send();
         }
 
-        public function updateUser(){
+        public function updateUser()
+        {
             global $pcto, $userRepo;
 
             $id = $_GET['id'];
@@ -178,7 +182,8 @@
             $res->send();
         }
 
-        public function deleteUser(){
+        public function deleteUser()
+        {
             global $pcto, $userRepo;
          
             $idUtente = $_GET["id"];

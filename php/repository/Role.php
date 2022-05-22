@@ -1,104 +1,109 @@
 <?php
-    class Role {
-        private $pdo;
+class Role
+{
+    private $pdo;
 
-        public function __construct($pdo) {
-            $this->pdo = $pdo;
+    public function __construct($pdo)
+    {
+        $this->pdo = $pdo;
+    }
+
+    public function get($id)
+    {
+        $sql = "SELECT * FROM ruoli WHERE idRuolo = :id";
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute(
+            array(
+                ":id" => $id,
+            )
+        );
+
+        $role = null;
+
+        if ($row = $stmt->fetch()) {
+            $role = array(
+                "id" => $id,
+                "nome" => $row['nome'],
+                "descrizione" => $row['descrizione'],
+            );
         }
 
-        public function get($id) {
-            $sql = "SELECT * FROM ruoli WHERE idRuolo = :id";
-            $stmt = $this->pdo->prepare($sql);
+        return $role;
+    }
 
-            $stmt->execute(
-                array(
-                    ":id" => $id
-                )
+    public function getAll()
+    {
+        $sql = "SELECT * FROM ruoli";
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute();
+
+        $result = array();
+
+        while ($row = $stmt->fetch()) {
+            $role = array(
+                "id" => $row['idRuolo'],
+                "nome" => $row['nome'],
+                "descrizione" => $row['descrizione'],
             );
 
-            $role = NULL;
-
-            if ($row = $stmt->fetch()) {
-                $role = array(
-                    "id" => $id,
-                    "nome" => $row['nome'],
-                    "descrizione" => $row['descrizione']
-                );
-            }
-
-            return $role;
+            array_push($result, $role);
         }
 
-        public function getAll() {
-            $sql = "SELECT * FROM ruoli";
-            $stmt = $this->pdo->prepare($sql);
+        return $result;
+    }
 
-            $stmt->execute();
+    public function getByName($name)
+    {
+        $sql = "SELECT * FROM ruoli WHERE nome = :name";
+        $stmt = $this->pdo->prepare($sql);
 
-            $result = array();
+        $stmt->execute(
+            array(
+                ":name" => $name,
+            )
+        );
 
-            while($row = $stmt->fetch()) {
-                $role = array(
-                    "id" => $row['idRuolo'],
-                    "nome" => $row['nome'],
-                    "descrizione" => $row['descrizione']
-                );
+        $role = null;
 
-                array_push($result, $role);
-            }
-
-            return $result;
-        }
-
-        public function getByName($name) {
-            $sql = "SELECT * FROM ruoli WHERE nome = :name";
-            $stmt = $this->pdo->prepare($sql);
-
-            $stmt->execute(
-                array(
-                    ":name" => $name
-                )
+        if ($row = $stmt->fetch()) {
+            $role = array(
+                "id" => $row['idRuolo'],
+                "nome" => $row['nome'],
+                "descrizione" => $row['descrizione'],
             );
-
-            $role = NULL;
-
-            if ($row = $stmt->fetch()) {
-                $role = array(
-                    "id" => $row['idRuolo'],
-                    "nome" => $row['nome'],
-                    "descrizione" => $row['descrizione']
-                );
-            }
-
-            return $role;
         }
 
-        public function getByUser($id) {
-            $sql = "SELECT ruoli.idRuolo, ruoli.denominazione
+        return $role;
+    }
+
+    public function getByUser($id)
+    {
+        $sql = "SELECT ruoli.idRuolo, ruoli.denominazione
             FROM assegnazione
-            INNER JOIN ruoli 
+            INNER JOIN ruoli
                 ON assegnazione.ksRuolo = ruoli.idRuolo
             WHERE assegnazione.ksUtente = :id";
-            $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-            $stmt->execute(
-                array(
-                    ":id" => $id
-                )
+        $stmt->execute(
+            array(
+                ":id" => $id,
+            )
+        );
+
+        $roles = array();
+
+        while ($row = $stmt->fetch()) {
+            $role = array(
+                "id" => $row['idRuolo'],
+                "denominazione" => $row['denominazione'],
             );
 
-            $roles = array();
-
-            while ($row = $stmt->fetch()) {
-                $role = array(
-                    "id" => $row['idRuolo'],
-                    "denominazione" => $row['denominazione'],
-                );
-
-                array_push($roles, $role);
-            }
-
-            return $roles;
+            array_push($roles, $role);
         }
+
+        return $roles;
     }
-?>
+}
