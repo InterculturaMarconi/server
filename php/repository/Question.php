@@ -34,8 +34,8 @@ class Question
         $sql = "SELECT * 
         FROM form 
         INNER JOIN domande 
-            ON from.idForm = domande.ksForm 
-        WHERE from.idForm = :id";
+            ON form.idForm = domande.ksForm 
+        WHERE form.idForm = :id";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([":id" => $id]);
