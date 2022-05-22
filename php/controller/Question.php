@@ -1,7 +1,7 @@
 <?php
 class QuestionController
 {
-    public function getQuestions() 
+    public function getAll() 
     {
         global $pcto, $formRepo, $questionRepo;
 
@@ -16,7 +16,7 @@ class QuestionController
             $res->send();
         }
 
-        if (!$pcto->isObjectiveAdmin($form["idObiettivo"])) {
+        if (!$pcto->hasObjectivePermission($form["id_obiettivo"])) {
             $res = new RESPONSE();
             $res->setStatus(401);
             $res->setMessage("Operation not permitted.");
@@ -139,11 +139,13 @@ class QuestionController
         $res->send();
     }
 
+    // TODO: updateQuestion()
     public function updateQuestion() 
     {
         global $pcto, $questionRepo;
     }
 
+    // TODO: updateQuestion()
     public function deleteQuestion() 
     {
         global $pcto, $questionRepo;
