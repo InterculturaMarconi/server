@@ -11,6 +11,8 @@ include_once 'repository/Role.php';
 include_once '../includes/dbConn.php';
 include_once 'middleware/withauth.php';
 
+include_once 'cors.php';
+
 $pcto = new PCTO($pdo);
 $userRepo = new User($pdo);
 $roleRepo = new Role($pdo);

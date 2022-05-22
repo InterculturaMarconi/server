@@ -3,6 +3,7 @@
 include_once 'RESPONSE.php';
 include_once 'repository/User.php';
 include_once '../includes/dbConn.php';
+include_once 'cors.php';
 
 $body = json_decode(file_get_contents('php://input'), true);
 

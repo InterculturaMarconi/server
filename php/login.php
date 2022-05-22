@@ -5,6 +5,7 @@ include_once 'RESPONSE.php';
 include_once 'repository/User.php';
 include_once '../includes/dbConn.php';
 include_once 'middleware/withmethod.php';
+include_once 'cors.php';
 
 withMethod("POST");
 
