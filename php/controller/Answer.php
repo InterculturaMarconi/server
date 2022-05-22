@@ -166,7 +166,7 @@ class AnswerContorller
         $formId = $body["id_form"];
         $questionId = $body["id_domanda"];
         $testo = $body["testo"];
-        
+
         $form = $formRepo->get($formId);
         if ($form == null) {
             (new RESPONSE())
@@ -174,7 +174,7 @@ class AnswerContorller
                 ->setMessage("Form not found")
                 ->send();
         }
-        
+
         $question = $questionRepo->get($questionId);
         if ($question == null) {
             (new RESPONSE())
