@@ -38,8 +38,9 @@ RewriteRule ^form/([1-9][0-9]*)/questions/?$ php/domande.php?action=all&form=$1
 RewriteRule ^form/([1-9][0-9]*)/answers/?$ php/risposte.php?action=all&form=$1
 RewriteRule ^form/([1-9][0-9]*)/answers/([1-9][0-9]*)/?$ php/risposte.php?action=user&form=$1&user=$2
 
-RewriteRule ^question/?$ php/domande.php?form=$1
+RewriteRule ^question/?$ php/domande.php
 RewriteRule ^question/([1-9][0-9]*)/?$ php/domande.php?id=$1
+RewriteRule ^question/([1-9][0-9]*)/answers/?$ php/risposte.php?id=$1&action=question
 
 RewriteRule ^answer/?$ php/risposte.php
 RewriteRule ^answer/([1-9][0-9]*)/?$ php/risposte.php?&id=$1

@@ -1,3 +1,2 @@
 <?php
-    echo "Intercultura Marconi";
-?>
+echo "Intercultura Marconi";

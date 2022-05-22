@@ -35,16 +35,15 @@ creare una API poiché sarà gestito al 100% direttamenti in DB.
 //GET     /form/:id/answers/:id     - Tutte le risposte date al form dell'utente
 
 
-GET     /question/:id  - Informazioni circa la domanda data per il form specificato
-POST    /question      - aggiunge una domanda
+//GET     /question/:id  - Informazioni circa la domanda data per il form specificato
+//POST    /question      - aggiunge una domanda
 PUT     /question/:id  - aggiorna una domanda
 DELETE  /question/:id  - elimina la domanda
-GET     /question/:id/answers/  - Tutte le risposte date a quella domanda
-GET     /question/:id/answers/:id  - La risposta data a quella domanda da parte dell'utente
+//GET     /question/:id/answers/  - Tutte le risposte date a quella domanda
 
 
-GET     /answer/:id   - Informazioni circa quella risposta
-POST    /answer       - Aggiunge una risposta
+//GET     /answer/:id   - Informazioni circa quella risposta
+//POST    /answer       - Aggiunge una risposta
 PUT     /answer/:id   - Aggiorna informazioni circa quella risposta
 DELETE  /answer/:id   - Elimina quall data risposta
 
