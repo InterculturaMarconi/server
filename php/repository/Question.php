@@ -12,7 +12,7 @@ class Question
     {
         $sql = "SELECT * FROM domande WHERE idDomanda = :id";
         
-        $stmt = $this->pdo->prepare(sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute([":id" => $id]);
 
         $question = null;

@@ -198,6 +198,20 @@ class AnswerController
         $email = withAuth()[0];
         $userId = $userRepo->getByEmail($email)["id"];
 
-        $answer = $answerRepo->add($userId, $questionId, $testo);
+        $answered = $answerRepo->add($userId, $questionId, $testo);
+
+        if (!$answered) {
+            $res = new RESPONSE();
+            $res->setStatus(400);
+            $res->setMessage("Answer not added");
+            $res->setError(1);
+            $res->send();
+        }
+
+        $res = new RESPONSE();
+        $res->setStatus(200);
+        $res->setSuccess();
+        $res->setMessage("Answer added");
+        $res->send();
     }
 }
