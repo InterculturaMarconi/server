@@ -103,4 +103,14 @@ class Answer
 
         return $risposte;
     }
+
+    public function add($userId, $questionId, $testo)
+    {
+        $sql = "INSERT INTO risposte (ksUtente, ksDomanda, testo) VALUES (:user, :question, :text)";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([":user" => $userId, ":question" => $questionId, ":text" => $testo]);
+
+        return $stmt->rowCount() > 0;
+    }
 }

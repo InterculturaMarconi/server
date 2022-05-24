@@ -19,7 +19,7 @@ $formRepo = new Form($pdo);
 $questionRepo = new Question($pdo);
 $answerRepo = new Answer($pdo);
 
-$answerController = new QuestionController();
+$answerController = new AnswerController();
 
 switch ($_SERVER["REQUEST_METHOD"]) {
     case "GET":GET();
