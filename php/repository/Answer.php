@@ -37,7 +37,7 @@ class Answer
             ON ksForm = idForm
         INNER JOIN risposte
             ON ksDomanda = idDomanda
-        WHERE idForm = :form AND idUtente = :user";
+        WHERE idForm = :form AND ksUtente = :user";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([":form" => $formId, ":user" => $userId]);

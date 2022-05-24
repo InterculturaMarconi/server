@@ -33,6 +33,7 @@ class AnswerController
 
         $res = new RESPONSE();
         $res->setStatus(200);
+        $res->setSuccess();
         $res->setData($answers);
         $res->send();
     }
@@ -70,6 +71,7 @@ class AnswerController
 
         $res = new RESPONSE();
         $res->setStatus(200);
+        $res->setSuccess();
         $res->setData($answers);
         $res->send();
     }
@@ -116,6 +118,7 @@ class AnswerController
 
         $res = new RESPONSE();
         $res->setStatus(200);
+        $res->setSuccess();
         $res->setData($answers);
         $res->send();
     }
@@ -146,6 +149,7 @@ class AnswerController
 
         $res = new RESPONSE();
         $res->setStatus(200);
+        $res->setSuccess();
         $res->setData($answer);
         $res->send();
     }
