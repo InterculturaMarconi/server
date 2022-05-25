@@ -41,6 +41,9 @@ function GET()
             case "visible":
                 $formController->getVisibleForm();
                 break;
+            case "responders":
+                $formController->getResponders();
+                break;
             default:(new RESPONSE())
                     ->setStatus(400)
                     ->setMessage("Invalid action")

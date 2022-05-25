@@ -32,6 +32,45 @@ class FormController
         $response->send();
     }
 
+    public function getResponders()
+    {
+        global $pcto, $formRepo;
+
+        $id = $_GET["id"];
+        $form = $formRepo->get($id);
+
+        if ($form == null) {
+            $res = new RESPONSE();
+            $res->setStatus(400);
+            $res->setMessage("No form found associated with this id.");
+            $res->setError(1);
+            $res->send();
+        }
+
+        if (!$pcto->isObjectiveAdmin($form["id_obiettivo"])) {
+            $res = new RESPONSE();
+            $res->setStatus(401);
+            $res->setMessage("Operation not permitted.");
+            $res->setError(1);
+            $res->send();
+        }
+
+        $responders = $formRepo->getResponders($id);
+        if (count($responders) == 0) {
+            $res = new RESPONSE();
+            $res->setStatus(400);
+            $res->setMessage("No responders found associated with this id.");
+            $res->setError(1);
+            $res->send();
+        }
+
+        $response = new RESPONSE();
+        $response->setStatus(200);
+        $response->setSuccess();
+        $response->setData($responders);
+        $response->send();
+    }
+
     public function getFormsByObiettivo()
     {
         global $pcto, $formRepo;

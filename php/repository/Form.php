@@ -32,6 +32,41 @@ class Form
         return $form;
     }
 
+    public function getResponders($id)
+    {
+        $sql = "SELECT utenti.*
+        FROM form
+        INNER JOIN domande
+            ON ksForm = idForm
+        INNER JOIN risposte
+            ON ksDomanda = idDomanda
+        INNER JOIN utenti
+            ON ksUtente = idUtente
+        WHERE idForm = :form";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute(
+            array(
+                ":form" => $id,
+            )
+        );
+
+        $users = [];
+
+        while ($row = $stmt->fetch()) {
+            $users = [
+                "id" => $row['idUtente'],
+                "nome" => $row['nome'],
+                "cognome" => $row['cognome'],
+                "email" => $row['email'],
+                "img" => $row['imgProfilo'],
+            ];
+        }
+
+        return $users;
+    }
+
     public function getByObiettivo($idObiettivo)
     {
         $sql = "SELECT * FROM form WHERE idObiettivo = :idObiettivo";
